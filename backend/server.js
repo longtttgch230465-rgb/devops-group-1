@@ -10,13 +10,12 @@ app.use(express.json());
 
 // BUG #1: Wrong default password - doesn't match docker-compose!
 const pool = new Pool({
-   user: process.env.DB_USER || 'postgres',
+   user: process.env.DB_USER || 'myuser',
    host: process.env.DB_HOST || 'localhost',
-   database: process.env.DB_NAME || 'tododb',
-   password: process.env.DB_PASSWORD || 'postgres', 
+   database: process.env.DB_NAME || 'mydb',
+   password: process.env.DB_PASSWORD || 'mypassword',
    port: process.env.DB_PORT || 5432,
 });
-
 app.get('/health', (req, res) => {
    res.json({ status: 'healthy', version: '1.0.0' });
 });
@@ -121,7 +120,11 @@ if (process.env.NODE_ENV !== 'test') {
    });
 }
 
-module.exports = app;
+process.on('SIGINT', async () => {
+   await pool.end();
+   process.exit(0);
+});
 
+module.exports = app;
 // BUG #6: App not exported - tests can't import it!
 // STUDENT FIX: Export the app module
