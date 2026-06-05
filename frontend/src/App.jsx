@@ -1,84 +1,92 @@
 import { useState, useEffect } from 'react';
+import './style.css';
 
-// STUDENT TODO: This API_URL works for local development
-// For Docker, you may need to configure nginx proxy or use container networking
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
 
+  const pendingTodos = todos.filter((todo) => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   const fetchTodos = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/todos`);
-      const data = await res.json();
-      setTodos(data);
-    } catch (err) {
-      console.error('Fetch error:', err);
-    }
+    const res = await fetch(`${API_URL}/api/todos`);
+    const data = await res.json();
+    setTodos(data);
   };
 
   const addTodo = async () => {
     if (!newTodo.trim()) return;
 
-    try {
-      await fetch(`${API_URL}/api/todos`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: newTodo })
-      });
-      setNewTodo('');
-      fetchTodos();
-    } catch (err) {
-      alert('Failed to add todo');
-    }
+    await fetch(`${API_URL}/api/todos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: newTodo, completed: false })
+    });
+
+    setNewTodo('');
+    fetchTodos();
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>🚀 DevOps Todo App</h1>
-      <p>Demo: Watch UI update LIVE after CI/CD! ✨</p>
+    <div className="page">
+      <header className="hero">
+        <h1>Todo App</h1>
+      </header>
 
-      <div style={{ marginBottom: '20px' }}>
-        <input
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          placeholder="Add new todo..."
-          style={{ padding: '10px', width: '70%', marginRight: '10px' }}
-        />
-        <button onClick={addTodo} style={{ padding: '10px 20px' }}>
-          Add Todo
-        </button>
-      </div>
+      <main className="content">
+        <div className="top-row">
+          <h2>Tasks</h2>
+          <button onClick={addTodo}> Add Task</button>
+        </div>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {todos.map(todo => (
-          <li key={todo.id} style={{
-            padding: '10px',
-            border: '1px solid #ddd',
-            marginBottom: '5px',
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}>
-            <span>{todo.title}</span>
-            <small>{todo.completed ? '✅' : '⏳'}</small>
-          </li>
-        ))}
-      </ul>
+        <div className="input-row">
+          <input
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            placeholder="Enter new task..."
+          />
+        </div>
 
-      <div style={{ marginTop: '30px', fontSize: '12px', color: '#666' }}>
-        <p><strong>STUDENT TODO:</strong></p>
-        <ul>
-          <li>Dockerfile (multi-stage)</li>
-          <li>Fix backend validation (broken test)</li>
-          <li>CI/CD pipeline</li>
-          <li>REPORT.md + Slides</li>
-        </ul>
-      </div>
+        <div className="task-list">
+          {pendingTodos.map((todo) => (
+            <div className="task-card" key={todo.id}>
+              <div className="task-left">
+                <span className="checkbox"></span>
+                <strong>{todo.title}</strong>
+              </div>
+
+              <div className="task-right">
+                <span className="status pending">Pending</span>
+                <span className="dot yellow"></span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h3 className="completed-title">Completed ▲</h3>
+
+        <div className="task-list">
+          {completedTodos.map((todo) => (
+            <div className="task-card completed" key={todo.id}>
+              <div className="task-left">
+                <span className="checkbox checked">✓</span>
+                <strong className="completed-text">{todo.title}</strong>
+              </div>
+
+              <div className="task-right">
+                <span className="status done">Done</span>
+                <span className="dot green"></span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }

@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+}
+
+.page {
+  width: 92%;
+  margin: 30px auto;
+  background: #f4f4f4;
+  min-height: 88vh;
+  border: 8px solid white;
+}
+
+.hero {
+  height: 190px;
+  background: linear-gradient(rgba(15, 207, 182, 0.45), rgba(0, 0, 0, 0.45)),
+              url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  color: #F1F5F9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 72px;
+  letter-spacing: 2px;
+}
+
+.content {
+  max-width: 900px;
+  margin: 45px auto;
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-row h2 {
+  font-size: 34px;
+}
+
+button {
+  background: #357a3b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 13px 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #265b2b;
+}
+
+.input-row {
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.task-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 22px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-left {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.checkbox {
+  width: 17px;
+  height: 17px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.task-right {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.status {
+  color: #888;
+}
+
+.dot {
+  width: 18px;
+  height: 32px;
+  border-radius: 14px;
+  display: inline-block;
+}
+
+.green {
+  background: #3fae5a;
+}
+
+.yellow {
+  background: #f6d85d;
+}
+
+h3 {
+  margin-top: 25px;
+}
