@@ -41,6 +41,13 @@ jobs:
       - name: Cài đặt thư viện Backend
         run: cd backend && npm ci
 
+      # --- BƯỚC MỚI ĐƯỢC THÊM VÀO ĐỂ FIX LỖI 500 ---
+      - name: Khởi tạo Database (Tạo bảng todos)
+        env:
+          PGPASSWORD: password
+        run: psql -h localhost -U postgres -d todo_test -f database/init.sql
+      # ---------------------------------------------
+
       - name: Chạy Test Backend (Phải pass thì mới cho đi tiếp)
         env:
           DB_HOST: localhost
