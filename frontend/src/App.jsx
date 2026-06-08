@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react';
 import './style.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://40.81.18.199:8080';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
-
-  const pendingTodos = todos.filter((todo) => !todo.completed);
-  const completedTodos = todos.filter((todo) => todo.completed);
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
 
   const fetchTodos = async () => {
     const res = await fetch(`${API_URL}/api/todos`);
@@ -20,18 +13,77 @@ function App() {
     setTodos(data);
   };
 
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const pendingTodos = todos.filter((todo) => !todo.completed);
+  const completedTodos = todos.filter((todo) => todo.completed);
+
   const addTodo = async () => {
     if (!newTodo.trim()) return;
 
     await fetch(`${API_URL}/api/todos`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: newTodo, completed: false })
+      body: JSON.stringify({ title: newTodo.trim(), completed: false })
     });
 
     setNewTodo('');
     fetchTodos();
   };
+
+  const toggleTodo = (id) => {
+    setTodos((currentTodos) =>
+      currentTodos.map((todo) =>
+        todo.id === id
+          ? { ...todo, completed: !todo.completed }
+          : todo
+      )
+    );
+  };
+
+  const saveTodos = async () => {
+    await Promise.all(
+      todos.map((todo) =>
+        fetch(`${API_URL}/api/todos/${todo.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: todo.title,
+            completed: todo.completed
+          })
+        })
+      )
+    );
+
+    await fetchTodos();
+    alert('Saved to database!');
+  };
+
+  const renderTodo = (todo) => (
+    <div className={`task-card ${todo.completed ? 'completed' : ''}`} key={todo.id}>
+      <div className="task-left">
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => toggleTodo(todo.id)}
+          className="todo-checkbox"
+        />
+
+        <strong className={todo.completed ? 'completed-text' : ''}>
+          {todo.title}
+        </strong>
+      </div>
+
+      <div className="task-right">
+        <span className={todo.completed ? 'status done' : 'status pending'}>
+          {todo.completed ? 'Done' : 'Pending'}
+        </span>
+        <span className={todo.completed ? 'dot green' : 'dot yellow'}></span>
+      </div>
+    </div>
+  );
 
   return (
     <div className="page">
@@ -42,7 +94,10 @@ function App() {
       <main className="content">
         <div className="top-row">
           <h2>Tasks</h2>
-          <button onClick={addTodo}> Add Task</button>
+          <div className="button-group">
+            <button onClick={addTodo}>Add Task</button>
+            <button onClick={saveTodos}>Save</button>
+          </div>
         </div>
 
         <div className="input-row">
@@ -54,37 +109,13 @@ function App() {
         </div>
 
         <div className="task-list">
-          {pendingTodos.map((todo) => (
-            <div className="task-card" key={todo.id}>
-              <div className="task-left">
-                <span className="checkbox"></span>
-                <strong>{todo.title}</strong>
-              </div>
-
-              <div className="task-right">
-                <span className="status pending">Pending</span>
-                <span className="dot yellow"></span>
-              </div>
-            </div>
-          ))}
+          {pendingTodos.map((todo) => renderTodo(todo))}
         </div>
 
-        <h3 className="completed-title">Completed ▲</h3>
+        <h3 className="completed-title">Completed</h3>
 
         <div className="task-list">
-          {completedTodos.map((todo) => (
-            <div className="task-card completed" key={todo.id}>
-              <div className="task-left">
-                <span className="checkbox checked">✓</span>
-                <strong className="completed-text">{todo.title}</strong>
-              </div>
-
-              <div className="task-right">
-                <span className="status done">Done</span>
-                <span className="dot green"></span>
-              </div>
-            </div>
-          ))}
+          {completedTodos.map((todo) => renderTodo(todo))}
         </div>
       </main>
     </div>

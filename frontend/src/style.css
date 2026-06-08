@@ -15,7 +15,7 @@ body {
 .hero {
   height: 190px;
   background: linear-gradient(rgba(15, 207, 182, 0.45), rgba(0, 0, 0, 0.45)),
-              url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
+    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -24,7 +24,7 @@ body {
 }
 
 .hero h1 {
-  color: #F1F5F9;
+  color: #f1f5f9;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 72px;
   letter-spacing: 2px;
@@ -59,11 +59,16 @@ button:hover {
   background: #265b2b;
 }
 
+.button-group {
+  display: flex;
+  gap: 12px;
+}
+
 .input-row {
   margin-bottom: 20px;
 }
 
-input {
+.input-row input {
   width: 100%;
   padding: 15px;
   border: 1px solid #d6d6d6;
@@ -82,17 +87,21 @@ input {
   align-items: center;
 }
 
+.task-card.completed {
+  background: #f4fff6;
+}
+
 .task-left {
   display: flex;
   gap: 18px;
   align-items: center;
 }
 
-.checkbox {
-  width: 17px;
-  height: 17px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+.todo-checkbox {
+  width: 20px !important;
+  height: 20px !important;
+  cursor: pointer;
+  accent-color: #3fae5a;
 }
 
 .task-right {
@@ -103,6 +112,15 @@ input {
 
 .status {
   color: #888;
+}
+
+.status.done {
+  color: #2f8f46;
+  font-weight: bold;
+}
+
+.status.pending {
+  color: #8a7a2d;
 }
 
 .dot {
@@ -120,6 +138,11 @@ input {
   background: #f6d85d;
 }
 
-h3 {
-  margin-top: 25px;
+.completed-title {
+  margin-top: 35px;
+}
+
+.completed-text {
+  text-decoration: line-through;
+  opacity: 0.65;
 }

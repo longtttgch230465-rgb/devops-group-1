@@ -6,8 +6,8 @@ services:
   # FRONTEND SERVICE
   # ==========================================
   frontend:
-    # Use the pre-built image from Docker Hub instead of building locally
-    image: sowgoroo/devops-frontend:latest
+    build:
+      context: ./frontend
     ports:
       - "3000:3000"
     depends_on:
@@ -17,8 +17,8 @@ services:
   # BACKEND SERVICE
   # ==========================================
   backend:
-    # Use the pre-built image from Docker Hub instead of building locally
-    image: sowgoroo/devops-backend:latest
+    build:
+      context: ./backend
     ports:
       - "8080:8080"
     environment:
@@ -50,7 +50,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      # Updated the file name from database.sql to init.sql to match the recent change
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U myuser -d mydb"]
@@ -59,8 +58,5 @@ services:
       retries: 5
       start_period: 10s
 
-# ==========================================
-# NAMED VOLUMES
-# ==========================================
 volumes:
   postgres_data:
