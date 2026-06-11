@@ -6,8 +6,8 @@ services:
   # FRONTEND SERVICE
   # ==========================================
   frontend:
-    build:
-      context: ./frontend
+    # Đã sửa build thành image tải từ Docker Hub
+    image: TEN_DOCKERHUB_CUA_BAN/devops-frontend:latest
     ports:
       - "3000:3000"
     depends_on:
@@ -17,8 +17,8 @@ services:
   # BACKEND SERVICE
   # ==========================================
   backend:
-    build:
-      context: ./backend
+    # Đã sửa build thành image tải từ Docker Hub
+    image: TEN_DOCKERHUB_CUA_BAN/devops-backend:latest
     ports:
       - "8080:8080"
     environment:
