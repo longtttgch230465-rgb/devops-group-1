@@ -83,7 +83,7 @@ app.delete('/api/todos/:id', async (req, res) => {
 });
 // BUG #4: Missing PUT endpoint for updating todos
 // STUDENT TODO: Implement PUT /api/todos/:id endpoint
-app.put('/api/todos/:id', async (req, res) => {
+
    try {
       const { id } = req.params;
       const { title, completed } = req.body;
